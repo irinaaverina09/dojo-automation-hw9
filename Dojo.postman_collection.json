@@ -1,0 +1,725 @@
+{
+  "info": {
+    "_postman_id": "eb56bf87-84db-4c64-83f1-c7ae2c2828ea",
+    "name": "Dojo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "17314284"
+  },
+  "item": [
+    {
+      "name": "HW7",
+      "item": [
+        {
+          "name": "Create Category",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "function randomString(len) {",
+                  "  return Math.random().toString(36).substring(2, 2+len);",
+                  "}",
+                  "pm.collectionVariables.set(\"categoryName\", \"Cat_\" + randomString(5));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set(\"categoryId\", json.id);",
+                  "pm.expect(json).to.have.property(\"id\");",
+                  "pm.expect(json).to.have.property(\"name\");",
+                  "pm.expect(json).to.have.property(\"image\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"{{categoryName}}\",\r\n    \"image\": \"https://placeimg.com/640/480/any\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.expect(json).to.have.property(\"id\");",
+                  "pm.expect(json).to.have.property(\"name\");",
+                  "pm.expect(json).to.have.property(\"image\");"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categories",
+                "{{categoryId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.expect(json.name).to.include(\"Updated_\");",
+                  "pm.expect(json).to.have.property(\"image\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Updated_{{categoryName}}\",\r\n    \"image\": \"https://placeimg.com/640/480/any\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categories",
+                "{{categoryId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categories",
+                "{{categoryId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category After Delete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "  pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categories",
+                "{{categoryId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Products",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "function randomString(len) {",
+                  "  return Math.random().toString(36).substring(2, 2+len);",
+                  "}",
+                  "pm.collectionVariables.set(\"title\", \"Product_\" + randomString(5));",
+                  "pm.collectionVariables.set(\"price\", Math.floor(Math.random()*1000)+1);",
+                  "pm.collectionVariables.set(\"description\", \"Auto description\");",
+                  "pm.collectionVariables.set(\"categoryId\", 1);",
+                  "pm.collectionVariables.set(\"images\", [\"https://placehold.co/600x400\"]);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set(\"productId\", json.id);",
+                  "pm.expect(json).to.have.property(\"id\");",
+                  "pm.expect(json).to.have.property(\"title\");",
+                  "pm.expect(json).to.have.property(\"price\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"{{title}}\",\r\n    \"price\": {{price}},\r\n    \"description\": \"{{description}}\",\r\n    \"categoryId\": {{categoryId}},\r\n    \"images\": [\r\n        \"https://placehold.co/600x400\"\r\n    ]\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products Page 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.test(\"10 products returned\", function () {",
+                  "  pm.expect(json.length).to.eql(10);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?offset=0&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products Page 2",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?offset=10&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "10"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products Page 3",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?offset=20&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "20"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter by Price Range",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.test(\"All products within price range\", function () {",
+                  "  json.forEach(p => pm.expect(p.price).to.be.within(900,1000));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/?price_min=900&price_max=1000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "price_min",
+                  "value": "900"
+                },
+                {
+                  "key": "price_max",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter by Title + Price + Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const json = pm.response.json();",
+                  "pm.test(\"All products match filters\", function () {",
+                  "  json.forEach(p => {",
+                  "    pm.expect(p.title).to.include(\"Generic\");",
+                  "    pm.expect(p.price).to.be.within(900,1000);",
+                  "    pm.expect(p.category.id).to.eql(1);",
+                  "  });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/?title=Generic&price_min=900&price_max=1000&categoryId=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "Generic"
+                },
+                {
+                  "key": "price_min",
+                  "value": "900"
+                },
+                {
+                  "key": "price_max",
+                  "value": "1000"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "function randomString(len) {",
+                  "  return Math.random().toString(36).substring(2, 2+len);",
+                  "}",
+                  "pm.collectionVariables.set(\"name\", \"User_\" + randomString(5));",
+                  "pm.collectionVariables.set(\"email\", randomString(5) + \"@test.com\");",
+                  "pm.collectionVariables.set(\"password\", randomString(8));",
+                  "pm.collectionVariables.set(\"role\", Math.random() > 0.5 ? \"customer\" : \"admin\");",
+                  "pm.collectionVariables.set(\"avatar\", \"https://picsum.photos/200\");"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.collectionVariables.set(\"userId\", json.id);",
+                  "",
+                  "pm.test(\"User schema is valid\", function () {",
+                  "  pm.expect(json).to.have.property(\"id\");",
+                  "  pm.expect(json).to.have.property(\"name\");",
+                  "  pm.expect(json).to.have.property(\"role\");",
+                  "  pm.expect(json).to.have.property(\"email\");",
+                  "  pm.expect(json).to.have.property(\"password\");",
+                  "  pm.expect(json).to.have.property(\"avatar\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{name}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"role\": \"{{role}}\",\n  \"avatar\": \"{{avatar}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Created User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Ensure userId exists, otherwise run Create User first",
+                  "if (!pm.collectionVariables.get(\"userId\")) {",
+                  "  postman.setNextRequest(\"Create User\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const json = pm.response.json();",
+                  "pm.test(\"User schema is valid\", function () {",
+                  "  pm.expect(json).to.have.property(\"id\");",
+                  "  pm.expect(json).to.have.property(\"name\");",
+                  "  pm.expect(json).to.have.property(\"role\");",
+                  "  pm.expect(json).to.have.property(\"email\");",
+                  "  pm.expect(json).to.have.property(\"password\");",
+                  "  pm.expect(json).to.have.property(\"avatar\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "categoryName",
+      "value": "Cat_amx66"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://api.escuelajs.co/api/v1"
+    },
+    {
+      "key": "categoryId",
+      "value": 1
+    },
+    {
+      "key": "title",
+      "value": "Product_k0v10"
+    },
+    {
+      "key": "price",
+      "value": 741
+    },
+    {
+      "key": "description",
+      "value": "Auto description"
+    },
+    {
+      "key": "images",
+      "value": [
+        "https://placehold.co/600x400"
+      ]
+    },
+    {
+      "key": "productId",
+      "value": 72
+    },
+    {
+      "key": "name",
+      "value": "User_svagk"
+    },
+    {
+      "key": "email",
+      "value": "14n1u@test.com"
+    },
+    {
+      "key": "password",
+      "value": "520ypce2"
+    },
+    {
+      "key": "role",
+      "value": "admin"
+    },
+    {
+      "key": "avatar",
+      "value": "https://picsum.photos/200"
+    },
+    {
+      "key": "userId",
+      "value": 46
+    }
+  ]
+}
