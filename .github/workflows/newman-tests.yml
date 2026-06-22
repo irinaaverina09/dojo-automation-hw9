@@ -2,6 +2,8 @@ name: Run Newman tests
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ "main" ]
 
 jobs:
   api-testing:
@@ -25,7 +27,7 @@ jobs:
       - name: Run Newman tests
         run: newman run Dojo.postman_collection.json -r htmlextra --reporter-htmlextra-export newman/report.html
 
-      - name: Upload HTML report as artifact
+      - name: Upload HTML report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -33,9 +35,21 @@ jobs:
           path: newman/report.html
           retention-days: 7
 
-      - name: Add HTML report to summary
-        run: |
-          echo "## Newman HTML Report" >> $GITHUB_STEP_SUMMARY
-          echo "<details><summary>Open Report</summary>" >> $GITHUB_STEP_SUMMARY
-          cat newman/report.html >> $GITHUB_STEP_SUMMARY
-          echo "</details>" >> $GITHUB_STEP_SUMMARY
+  deploy-report:
+    needs: api-testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Download report artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: newman-report
+          path: ./public
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
