@@ -48,6 +48,9 @@ jobs:
           name: newman-report
           path: ./public
 
+      - name: Rename report to index.html
+        run: mv ./public/report.html ./public/index.html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
